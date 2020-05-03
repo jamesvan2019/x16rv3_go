@@ -687,7 +687,7 @@ func fugue4_close_c_code(ub, n uint, dst []uint8) {
 	binary.BigEndian.PutUint32(dst[60:64], S1[30])
 }
 
-func sph_fugue512_process(data []uint8, dst []uint8, length uint) {
+func Sph_fugue512_process(data []uint8, dst []uint8, length uint) {
 
 	fugue_init_c_code(20, IV512[:], 16)
 	fugue4_core_c_code(data, length)
@@ -709,7 +709,7 @@ func main() {
 	}
 
 	log.Println("\n do fugue test 80bytes...\n")
-	sph_fugue512_process(buf[:], hash, 80)
+	Sph_fugue512_process(buf[:], hash, 80)
 	log.Printf("-hash = %x", hash)
 
 	hash0 = binary.LittleEndian.Uint32(hash)
@@ -722,7 +722,7 @@ func main() {
 
 	log.Println("\n do fugue test 64bytes...\n")
 
-	sph_fugue512_process(buf, hash, 64)
+	Sph_fugue512_process(buf, hash, 64)
 	log.Printf("-hash = %x", hash)
 
 	hash0 = binary.LittleEndian.Uint32(hash)

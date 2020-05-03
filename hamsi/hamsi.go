@@ -2767,7 +2767,7 @@ func hamsi_big_close_c_code(ub, n uint, dst []uint8, out_size_w32 uint) {
 	}
 }
 
-func sph_hamsi512_process(data []uint8, dst []uint8, length uint) {
+func Sph_hamsi512_process(data []uint8, dst []uint8, length uint) {
 	hamsi_big_init_c_code(IV512[:])
 	hamsi_big_core_c_code(data, length)
 	hamsi_big_close_c_code(0, 0, dst, 16)
@@ -2788,7 +2788,7 @@ func main() {
 		binary.LittleEndian.PutUint32(buf[i*4:i*4+4], input[i])
 	}
 	log.Println("\n do hamsi test 80bytes...\n")
-	sph_hamsi512_process(buf[:], hash, 80)
+	Sph_hamsi512_process(buf[:], hash, 80)
 	log.Printf("-hash = %x", hash)
 
 	hash0 = binary.LittleEndian.Uint32(hash)
@@ -2801,7 +2801,7 @@ func main() {
 
 	log.Println("\n do hamsi test 64bytes...\n")
 
-	sph_hamsi512_process(buf, hash, 64)
+	Sph_hamsi512_process(buf, hash, 64)
 	log.Printf("-hash = %x", hash)
 
 	hash0 = binary.LittleEndian.Uint32(hash)

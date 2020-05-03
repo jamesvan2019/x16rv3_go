@@ -15,8 +15,8 @@ type Uint128 struct {
 // GetBytes returns a big-endian byte representation.
 func (u Uint128) GetBytes() []byte {
 	buf := make([]byte, 16)
-	binary.BigEndian.PutUint64(buf[:8], u.V0)
-	binary.BigEndian.PutUint64(buf[8:], u.V1)
+	binary.LittleEndian.PutUint64(buf[:8], u.V0)
+	binary.LittleEndian.PutUint64(buf[8:], u.V1)
 	return buf
 }
 
@@ -82,8 +82,8 @@ func (u Uint128) Xor(o Uint128) Uint128 {
 // FromBytes parses the byte slice as a 128 bit big-endian unsigned integer.
 // The caller is responsible for ensuring the byte slice contains 16 bytes.
 func FromBytes(b []byte) Uint128 {
-	hi := binary.BigEndian.Uint64(b[:8])
-	V1 := binary.BigEndian.Uint64(b[8:])
+	hi := binary.LittleEndian.Uint64(b[:8])
+	V1 := binary.LittleEndian.Uint64(b[8:])
 	return Uint128{hi, V1}
 }
 
@@ -112,9 +112,33 @@ func FromInts(hi uint64, V1 uint64) Uint128 {
 	return Uint128{hi, V1}
 }
 
+// FromInts takes in two unsigned 64-bit integers and constructs a Uint128.
+func FromIntsArray(arr []uint64) Uint128 {
+	return Uint128{arr[0], arr[1]}
+}
+
+func (u Uint128) ToUint64() []uint64 {
+	return []uint64{u.V0, u.V1}
+}
+
 func Ur128_5xor(in0, in1, in2, in3, in4 Uint128) Uint128 {
 	var out = Uint128{}
 	out.V0 = in0.V0 ^ in1.V0 ^ in2.V0 ^ in3.V0 ^ in4.V0
 	out.V1 = in0.V1 ^ in1.V1 ^ in2.V1 ^ in3.V1 ^ in4.V1
 	return out
+}
+
+func Xor128(in0, in1 Uint128) Uint128 {
+	var out = Uint128{}
+	out.V0 = in0.V0 ^ in1.V0
+	out.V1 = in0.V1 ^ in1.V1
+	return out
+}
+
+func ArrayToBytes(a []Uint128) []byte {
+	b := make([]byte, 0)
+	for i := 0; i < len(a); i++ {
+		b = append(b, a[i].GetBytes()...)
+	}
+	return b
 }
